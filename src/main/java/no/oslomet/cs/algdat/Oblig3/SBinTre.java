@@ -178,8 +178,7 @@ Hvis p er venstre barn til sin forelder f, gjelder:
     public void postorden(Oppgave<? super T> oppgave) {
         //throw new UnsupportedOperationException("Ikke kodet ennå!");
         Node<T> p = rot;
-        p = nestePostorden(p);
-
+        postordenRecursive(p, oppgave);
         while(p != null){
             p = nestePostorden(p);
         }
@@ -192,8 +191,8 @@ Hvis p er venstre barn til sin forelder f, gjelder:
     private void postordenRecursive(Node<T> p, Oppgave<? super T> oppgave) {
         //throw new UnsupportedOperationException("Ikke kodet ennå!");
 
-        if (p.venstre != null) postorden(p.venstre,oppgave);
-        if (p.høyre != null) postorden(p.høyre,oppgave);
+        if (p.venstre != null) postordenRecursive(p.venstre,oppgave);
+        if (p.høyre != null) postordenRecursive(p.høyre,oppgave);
         oppgave.utførOppgave(p.verdi);
     }
 
