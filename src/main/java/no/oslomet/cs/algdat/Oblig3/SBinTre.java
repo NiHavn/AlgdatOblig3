@@ -80,7 +80,7 @@ public class SBinTre<T> {
         return antall == 0;
     }
 
-    public boolean leggInn(T verdi) {
+    public boolean leggInn(T verdi) {  //Hentet fra kompendiet
         //throw new UnsupportedOperationException("Ikke kodet ennå!");
         Objects.requireNonNull(verdi, "Ulovlig med nullverdier!");
 
@@ -123,15 +123,15 @@ public class SBinTre<T> {
 
         while(p != null){
             if(comp.compare(verdi, p.verdi) < 0){
-                p = p.venstre;
-            }else if(comp.compare(verdi, p.verdi) == 0){
-                antall++;
-                p = p.høyre;
+                p = p.venstre;                            //Hvis verdi er mindre enn p blir verdien satt til venstre
+            }else if(comp.compare(verdi, p.verdi) == 0){  //hvis p = verdien har den en forekomst
+                antall++;                                 //og antall skal økes med en
+                p = p.høyre;                              //Setter p til høyre siden
             }else{
-                p = p.høyre;
+                p = p.høyre;                              //Hvis p er større enn verdi,setter verdi til høyre for p
             }
         }
-        return antall;
+        return antall;          //Returnerer antall forekomster av verdi
     }
 
     public void nullstill() {
@@ -160,27 +160,27 @@ Hvis p er venstre barn til sin forelder f, gjelder:
         så er den neste den noden som kommer først i postorden i subtreet med f.høyre som rot.
 */
 
-        if(p.forelder == null) return null;
-        else if(p.forelder.høyre == p) return p.forelder;
-        else if(p.forelder.høyre == null) return p.forelder;
+        if(p.forelder == null) return null;  //Treet har bare en node
+        else if(p.forelder.høyre == p) return p.forelder;    //p sin forelder er neste i postorden
+        else if(p.forelder.høyre == null) return p.forelder;  //p er enebarn
         else{
-            p = p.forelder.høyre;
+            p = p.forelder.høyre;  //Hopper over i subtreet
             while (p.venstre != null){
-                p = p.venstre;
+                p = p.venstre;   //Følger ventre barn til venstre hvis p er enebarn helt til p.venstre er null
             }
             while(p.høyre != null){
-                p = p.høyre;
+                p = p.høyre;  //Følger høyre barn til høyre hvis p er enebarn helt til p.høyre er null
             }
         }
-        return p;
+        return p;  //returnerer noden
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
         //throw new UnsupportedOperationException("Ikke kodet ennå!");
-        Node<T> p = rot;
-        postordenRecursive(p, oppgave);
+        Node<T> p = rot;  //p starter i rot-noden
+        postordenRecursive(p, oppgave);  //Kaller rekursiv metode
         while(p != null){
-            p = nestePostorden(p);
+            p = nestePostorden(p);  //Flytter p til neste til p == null
         }
     }
 
@@ -203,17 +203,4 @@ Hvis p er venstre barn til sin forelder f, gjelder:
     static <K> SBinTre<K> deserialize(ArrayList<K> data, Comparator<? super K> c) {
         throw new UnsupportedOperationException("Ikke kodet ennå!");
     }
-
-    public static void main(String[] args) {
-        Integer[] a = {4,7,2,9,4,10,8,7,4,6};
-        SBinTre<Integer> tre = new SBinTre<>(Comparator.naturalOrder());
-        for (int verdi : a) { tre.leggInn(verdi); }
-
-        System.out.println(tre.antall());      // Utskrift: 10
-        System.out.println(tre.antall(5));     // Utskrift: 0
-        System.out.println(tre.antall(4));     // Utskrift: 3
-        System.out.println(tre.antall(7));     // Utskrift: 2
-        System.out.println(tre.antall(10));    // Utskrift: 1
-    }
-
 } // ObligSBinTre
